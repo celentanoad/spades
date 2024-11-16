@@ -1,4 +1,11 @@
-const Room = ({ room, handleReturnToLobby }) => {
+import { Room } from "src/App";
+
+interface GameRoomProps {
+  room: Room
+  handleReturnToLobby: () => void;
+}
+
+const GameRoom = ({ room, handleReturnToLobby }: GameRoomProps) => {
   if (!room) {
     return <div>Loading...</div>;
   }
@@ -20,4 +27,4 @@ const Room = ({ room, handleReturnToLobby }) => {
    );
 }
  
-export default Room;
+export default GameRoom;
