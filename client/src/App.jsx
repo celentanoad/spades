@@ -1,17 +1,12 @@
 import { useEffect, useState } from 'react';
 import './App.css';
-import io, { Socket } from 'socket.io-client';
+import io from 'socket.io-client';
 import GameRoom from './components/GameRoom';
 
-export interface Room {
-  roomNumber: number;
-  users: string[];
-}
-
 const App = () => {
-  const [ roomList, setRoomList ] = useState<Room[]>([]);
-  const [ roomNumber, setRoomNumber ] = useState<number>(0);
-  const [ socket, setSocket ] = useState<Socket | null>(null);
+  const [ roomList, setRoomList ] = useState([]);
+  const [ roomNumber, setRoomNumber ] = useState(0);
+  const [ socket, setSocket ] = useState(null);
 
   useEffect(() => {
     const newSocket = io('http://localhost:3001');
@@ -38,11 +33,11 @@ const App = () => {
     setRoomNumber(0);
   };
 
-  const handleJoinGameRoom = (room: Room) => {
+  const handleJoinGameRoom = (room) => {
     if (!socket) return;
 
     const updatedRoomList = roomList.map((r) => 
-      r.roomNumber === room.roomNumber ? { ...r, users: [...r.users, socket.id].filter((user): user is string => user !== undefined) } : r
+      r.roomNumber === room.roomNumber ? { ...r, users: [...r.users, socket.id].filter(user => user !== undefined) } : r
     );
     setRoomList(updatedRoomList);
     // sends a message to the server to update the room list w/ the user added

@@ -1,0 +1,25 @@
+.card {
+  width: 100px;
+  height: 150px;
+  border: 1px solid #000;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  margin: 5px;
+}
+
+.card.hearts, .card.diamonds {
+  color: red;
+}
+
+.card.clubs, .card.spades {
+  color: black;
+}
+
+.card.back {
+  background-color: blue;
+  color: white;
+}
