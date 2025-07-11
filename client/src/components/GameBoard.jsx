@@ -1,4 +1,5 @@
 // import { SpadesGame } from '../utils/gameLogic';
+import '../components/GameBoard.css';
 import { useState, useEffect } from 'react';
 import Card from './Card/Card';
 
@@ -59,17 +60,20 @@ const GameBoard = ({ game }) => {
   };
 
   return (
-    <div>
-      <div>
+    <div className="game-board">
+      <div className="player-section">
         <div>Player 1</div>
         <div style={{ display: 'flex' }}>
           {gameState.players[0].hand.map((card, idx) => (
             <Card key={idx} card={card} isFaceUp={gameState.currentPlayerIndex === 1} handleSelectCard={handleSelectCard} />
           ))}
-          <div>Score Pile</div>
+          <div className="score-pile-container">
+            <div className="score-pile">Score Pile</div>
+            <div className="score-pile-outline"></div>
+          </div>
         </div>
       </div>
-      <div>
+      <div className="center-section">
         <div>Center</div>
         <div style={{ display: 'flex' }}>
           {gameState.centerCards.map((card, idx) => (
@@ -78,13 +82,16 @@ const GameBoard = ({ game }) => {
           <Card isFaceUp={false} />
         </div>
       </div>
-      <div>
+      <div className="player-section">
         <div>Player 2</div>
         <div style={{ display: 'flex' }}>
           {gameState.players[1].hand.map((card, idx) => (
             <Card key={idx} card={card} isFaceUp={gameState.currentPlayerIndex === 0} handleSelectCard={handleSelectCard} isSelected={selectedPlayerCard === card} type='player'/>
           ))}
-          <div>Score Pile</div>
+          <div className="score-pile-container">
+            <div className="score-pile">Score Pile</div>
+            <div className="score-pile-outline"></div>
+          </div>
         </div>
         <div>
           <button disabled={!isCaptureValid} onClick={handleCapture}>Capture</button>
