@@ -23,3 +23,8 @@
   background-color: blue;
   color: white;
 }
+
+.card.selected {
+  transform: scale(1.1);
+  border: 2px solid #00f;
+}
