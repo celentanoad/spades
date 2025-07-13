@@ -55,63 +55,70 @@ const GameBoard = ({ game }) => {
   };
 
   return (
-    <div className="game-board">
-      <div>Current Turn: Player {gameState.currentPlayerIndex + 1} ({currentPlayerId})</div>
-      <div className="player-section">
-        <div>Player 1</div>
-        <div style={{ display: 'flex' }}>
-          {gameState.players[0].hand.map((card, idx) => (
-            <Card 
-              key={idx} 
-              card={card} 
-              isFaceUp={true}
-              // isFaceUp={gameState.currentPlayerIndex === 1} 
-              handleSelectCard={handleSelectCard} 
-              isSelectable={gameState.currentPlayerIndex === 0}
-              isSelected={selectedPlayerCard === card} 
-              type='player'
-            />
-          ))}
-          <div className="score-pile-container">
-            <div className="score-pile">Score Pile</div>
-            <div className="score-pile-outline"></div>
-          </div>
-        </div>
-      </div>
-      <div className="center-section">
-        <div>Center</div>
-        <div style={{ display: 'flex' }}>
-          {gameState.centerCards.map((card, idx) => (
-            <Card key={idx} card={card} isFaceUp={true} handleSelectCard={handleSelectCard} isSelected={selectedCenterCards.includes(card)} type='center' />
-          ))}
-          <Card isFaceUp={false} />
-        </div>
-      </div>
-      <div className="player-section">
-        <div>Player 2</div>
-        <div style={{ display: 'flex' }}>
-          {gameState.players[1].hand.map((card, idx) => (
-            <Card 
-              key={idx} 
-              card={card} 
-              isFaceUp={true}
-              // isFaceUp={gameState.currentPlayerIndex === 0} 
-              handleSelectCard={handleSelectCard} 
-              isSelectable={gameState.currentPlayerIndex === 1}
-              isSelected={selectedPlayerCard === card} 
-              type='player'/>
-          ))}
-          <div className="score-pile-container">
-            <div className="score-pile">Score Pile</div>
-            <div className="score-pile-outline"></div>
-          </div>
-        </div>
-        <div>
-          <button disabled={!isCaptureValid} onClick={handleCapture}>Capture</button>
-          <button>Pass</button>
-        </div>
+<div className="game-board">
+  <div>Current Turn: Player {gameState.currentPlayerIndex + 1} ({currentPlayerId})</div>
+  <div className="player-section">
+    <div>Player 1</div>
+    <div className="card-selection">
+      {gameState.players[0].hand.map((card, idx) => (
+        <Card 
+          key={idx} 
+          card={card} 
+          isFaceUp={true}
+          // isFaceUp={gameState.currentPlayerIndex === 1} 
+          handleSelectCard={handleSelectCard} 
+          isSelectable={gameState.currentPlayerIndex === 0}
+          isSelected={selectedPlayerCard === card} 
+          type='player'
+        />
+      ))}
+      <div className="score-pile-container">
+        <div className="score-pile">Score Pile</div>
+        {gameState.players[0].scorePile.length ? <Card isFaceUp={false}/> : <div className="score-pile-outline"></div>}
       </div>
     </div>
+  </div>
+  <div className="center-section">
+    <div>Center</div>
+    <div className="card-selection">
+      {gameState.centerCards.map((card, idx) => (
+        <Card key={idx} card={card} isFaceUp={true} handleSelectCard={handleSelectCard} isSelected={selectedCenterCards.includes(card)} type='center' />
+      ))}
+      <div className="draw-pile-container">
+        <Card isFaceUp={false} />
+      </div>
+    </div>
+  </div>
+  <div className="player-section">
+    <div>Player 2</div>
+    <div className="card-selection">
+      {gameState.players[1].hand.map((card, idx) => (
+        <Card 
+          key={idx} 
+          card={card} 
+          isFaceUp={true}
+          // isFaceUp={gameState.currentPlayerIndex === 0} 
+          handleSelectCard={handleSelectCard} 
+          isSelectable={gameState.currentPlayerIndex === 1}
+          isSelected={selectedPlayerCard === card} 
+          type='player'/>
+      ))}
+      <div className="score-pile-container">
+        <div className="score-pile">Score Pile</div>
+        {gameState.players[1].scorePile.length ? <Card isFaceUp={false}/> : <div className="score-pile-outline"></div>}
+      </div>
+    </div>
+    <div>
+      <button disabled={!isCaptureValid} onClick={handleCapture}>Capture</button>
+      <button onClick={() => setGameState(prevState => ({
+        ...prevState,
+        currentPlayerIndex: prevState.currentPlayerIndex === 0 ? 1 : 0
+      }))}>
+        Pass
+      </button>
+    </div>
+  </div>
+</div>
   )
 }
 
