@@ -8,17 +8,13 @@ const GameBoard = ({ game }) => {
   const [isCaptureValid, setIsCaptureValid] = useState(false);
   const [selectedPlayerCard, setSelectedPlayerCard] = useState(null);
   const [selectedCenterCards, setSelectedCenterCards] = useState([]);
-  // const [currentPlayerId, setCurrentPlayerId] = useState(game.state.players[game.state.currentPlayerIndex].id);
+  const [currentPlayerId, setCurrentPlayerId] = useState(game.state.players[game.state.currentPlayerIndex].id);
   // const [isPlayerTurn, setIsPlayerTurn] = useState(game.state.players[0].id === Socket.id);
 
-  // need to adjust card values for face cards and aces
   const determineCardValues = () => {
     if (selectedPlayerCard && selectedCenterCards.length) {
-      console.log('check Card value')
-      const playerCardValue = Number(selectedPlayerCard.rank.abbrn);
-      console.log('playerCardValue', playerCardValue);
-      const centerCardValues = selectedCenterCards.map(card => Number(card.rank.abbrn));
-      console.log('centerCardValues', centerCardValues);
+      const playerCardValue = selectedPlayerCard.value;
+      const centerCardValues = selectedCenterCards.map(card => card.value);
       setIsCaptureValid(centerCardValues.reduce((acc, curr) => acc + curr, 0) === playerCardValue);
     } else {
       setIsCaptureValid(false);
@@ -29,8 +25,9 @@ const GameBoard = ({ game }) => {
     determineCardValues();
   }, [selectedPlayerCard, selectedCenterCards]);
 
-  const handleSelectCard = (card, type) => {
+  const handleSelectCard = (card, type, isPlayerTurn) => {
     if (type === 'player') {
+      if (!isPlayerTurn) return;
       if (selectedPlayerCard && selectedPlayerCard !== card) {
         return;
       }
@@ -51,9 +48,7 @@ const GameBoard = ({ game }) => {
   const handleCapture = () => {
     if (isCaptureValid) {
       const updatedState = game.captureCards(gameState.players[gameState.currentPlayerIndex].id, [selectedPlayerCard, ...selectedCenterCards]);
-      console.log('updatedState', updatedState);
       setGameState(updatedState);
-      // Reset selections after capture
       setSelectedPlayerCard(null);
       setSelectedCenterCards([]);
     }
@@ -61,11 +56,21 @@ const GameBoard = ({ game }) => {
 
   return (
     <div className="game-board">
+      <div>Current Turn: Player {gameState.currentPlayerIndex + 1} ({currentPlayerId})</div>
       <div className="player-section">
         <div>Player 1</div>
         <div style={{ display: 'flex' }}>
           {gameState.players[0].hand.map((card, idx) => (
-            <Card key={idx} card={card} isFaceUp={gameState.currentPlayerIndex === 1} handleSelectCard={handleSelectCard} />
+            <Card 
+              key={idx} 
+              card={card} 
+              isFaceUp={true}
+              // isFaceUp={gameState.currentPlayerIndex === 1} 
+              handleSelectCard={handleSelectCard} 
+              isSelectable={gameState.currentPlayerIndex === 0}
+              isSelected={selectedPlayerCard === card} 
+              type='player'
+            />
           ))}
           <div className="score-pile-container">
             <div className="score-pile">Score Pile</div>
@@ -86,7 +91,15 @@ const GameBoard = ({ game }) => {
         <div>Player 2</div>
         <div style={{ display: 'flex' }}>
           {gameState.players[1].hand.map((card, idx) => (
-            <Card key={idx} card={card} isFaceUp={gameState.currentPlayerIndex === 0} handleSelectCard={handleSelectCard} isSelected={selectedPlayerCard === card} type='player'/>
+            <Card 
+              key={idx} 
+              card={card} 
+              isFaceUp={true}
+              // isFaceUp={gameState.currentPlayerIndex === 0} 
+              handleSelectCard={handleSelectCard} 
+              isSelectable={gameState.currentPlayerIndex === 1}
+              isSelected={selectedPlayerCard === card} 
+              type='player'/>
           ))}
           <div className="score-pile-container">
             <div className="score-pile">Score Pile</div>

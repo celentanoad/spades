@@ -1,32 +1,19 @@
 import { useState } from 'react';
 import './Card.css';
 
-const Card = ({ card, isFaceUp, handleSelectCard, isSelected, type }) => {
+const Card = ({ card, isFaceUp, handleSelectCard, isSelected, type, isSelectable }) => {
   if (!isFaceUp) {
     return <div className="card back"></div>;
   }
 
-  // const [selected, setSelected] = useState(false);
-
-  const handleClickCard = () => {
-    setSelected(!selected);
-    handleSelectCard(card, type);
-    // if (!selected) {
-    //   setSelected(!selected);
-    //   handleSelectCard(card);
-    // } else {
-    //   handleSelectCard(null);
-    //   setSelected(!selected);
-    // }
-  };
 
   return (
     <div
-      className={`card ${card?.suit?.name} ${isSelected ? 'selected' : ''}`}
-      onClick={() => handleSelectCard(card, type)}
+      className={`card ${card?.suit} ${isSelected ? 'selected' : ''}`}
+      onClick={() => handleSelectCard(card, type, isSelectable)}
     >
-      <div className="rank">{card?.rank?.name}</div>
-      <div className="suit">{card?.suit?.name}</div>
+      <div className="rank">{card?.rank}</div>
+      <div className="suit">{card?.suit}</div>
     </div>
   );
 };
