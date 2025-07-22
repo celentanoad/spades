@@ -52,10 +52,19 @@ class SpadesGame {
     currentPlayer.scorePile.push(...cards);
     const updatedCenterCards = this.updateCenterCards(cards);
     // Assume the first card in cards array is the player's selected card for capture
+    // TODO: player must select a card from their hand before selecting center card
     const playerCard = cards[0];
-    const updatedPlayerHand = currentPlayer.hand.filter(
+    let updatedPlayerHand = currentPlayer.hand.filter(
       (handCard) => !handCard.isEqual(playerCard)
     );
+
+    if (updatedPlayerHand.length === 0) {
+      if (this.state.drawPile.deckPile.length > 7) {
+        updatedPlayerHand = this.convertToCustomCards(this.state.drawPile.draw(7))
+      } else {
+        updatedPlayerHand = this.convertToCustomCards(this.state.drawPile.draw(drawPile.length))
+      }
+    } 
     const updatedGameState = {
       ...this.state,
       players: this.state.players.map((player, index) =>
