@@ -54,6 +54,14 @@ const GameBoard = ({ game }) => {
     }
   };
 
+  const handlePass = (currentPlayerIndex) => {
+    setGameState(prevState => ({
+        ...prevState,
+        currentPlayerIndex: prevState.currentPlayerIndex === 0 ? 1 : 0
+      }));
+    game.passTurn(currentPlayerIndex)
+  }
+
   return (
 <div className="game-board">
   <div>Current Turn: Player {gameState.currentPlayerIndex + 1} ({currentPlayerId})</div>
@@ -110,10 +118,7 @@ const GameBoard = ({ game }) => {
     </div>
     <div>
       <button disabled={!isCaptureValid} onClick={handleCapture}>Capture</button>
-      <button onClick={() => setGameState(prevState => ({
-        ...prevState,
-        currentPlayerIndex: prevState.currentPlayerIndex === 0 ? 1 : 0
-      }))}>
+      <button onClick={() => handlePass(gameState.currentPlayerIndex)}>
         Pass
       </button>
     </div>
