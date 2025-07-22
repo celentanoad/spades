@@ -18,7 +18,7 @@ class SpadesGame {
       { id: player2Id, hand: this.convertToCustomCards(drawPile.draw(7)), scorePile: [] }
     ];
     const centerCards = this.convertToCustomCards(drawPile.draw(6));
-    const roundStatus = 'active';
+    const roundStatus = 'active'; // "active" or "ended"
     const passHistory = [];
     // Validate initial game state card counts
     if (players[0].hand.length !== 7 || players[1].hand.length !== 7) {
@@ -62,10 +62,38 @@ class SpadesGame {
         index === playerIndex ? { ...player, hand: updatedPlayerHand } : player
       ),
       centerCards: updatedCenterCards,
-      currentPlayerIndex: playerIndex === 0 ? 1 : 0
+      currentPlayerIndex: playerIndex === 0 ? 1 : 0,
+      passHistory: []
     };
     this.state = updatedGameState;
     return updatedGameState;
+  }
+
+  passTurn(playerIndex) {
+    const updatedPassHistory = this.state.passHistory.length + 1;
+
+    if (this.state.passHistory.length >= 1) {
+      this.endRound()
+    } else {
+      const updatedPassHistory = [...this.state.passHistory, playerIndex]
+      const updatedGameState = {
+        ...this.state,
+      passHistory: updatedPassHistory
+    }
+      this.state = updatedGameState;
+      return updatedGameState;
+    }
+  }
+
+  endRound() {
+    console.log('end round');
+    // set passHistory to empty array
+    return {
+      ...this.state,
+      passHistory: []
+    }
+    // add up scores
+    // check for end of game
   }
 }
 
